@@ -169,15 +169,7 @@ class Sistema:
     # ------------------------------------------------------------------
     # Reporte
     # ------------------------------------------------------------------
-    def reporte(self):
-        print("=" * 60)
-        print("REPORTE DE SOLICITUDES - " + date.today().strftime("%d/%m/%Y"))
-        print("=" * 60)
-        total = len(self.lst)
-        print("Total de solicitudes:", total)
-        if total == 0:
-            print("No hay solicitudes cargadas")
-            return
+    def _contar_por_estado(self):
         c1 = 0
         c2 = 0
         c3 = 0
@@ -191,6 +183,18 @@ class Sistema:
                 c3 += 1
             elif s.estado == "RECHAZADA":
                 c4 += 1
+        return c1, c2, c3, c4
+
+    def reporte(self):
+        print("=" * 60)
+        print("REPORTE DE SOLICITUDES - " + date.today().strftime("%d/%m/%Y"))
+        print("=" * 60)
+        total = len(self.lst)
+        print("Total de solicitudes:", total)
+        if total == 0:
+            print("No hay solicitudes cargadas")
+            return
+        c1, c2, c3, c4 = self._contar_por_estado()
         print("\nPor estado:")
         print("  Pendientes: " + str(c1) + " (" + str(round(c1 * 100 / total, 1)) + "%)")
         print("  En proceso: " + str(c2) + " (" + str(round(c2 * 100 / total, 1)) + "%)")
