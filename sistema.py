@@ -125,24 +125,29 @@ class Sistema:
         self.guardar()
         print("Responsable asignado")
 
-
     # ------------------------------------------------------------------
     # Busquedas
     # ------------------------------------------------------------------
+    def _texto_solicitud(self, s):
+        r = "Sin asignar"
+        if s.responsable != None:
+            r = s.responsable.nombre + " (" + s.responsable.area + ")"
+        p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
+        v = " [VENCIDA]" if s.esta_vencida() else ""
+        return ("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
+                + " | " + p + " | " + s.estado + " | " + r + v)
+
+    def _mostrar_solicitudes(self, res):
+        for s in res:
+            print(self._texto_solicitud(s))
+        print("Total:", len(res))
+
     def buscar_por_estado(self, estado):
         res = []
         for s in self.lst:
             if s.estado == estado:
                 res.append(s)
-        for s in res:
-            r = "Sin asignar"
-            if s.responsable != None:
-                r = s.responsable.nombre + " (" + s.responsable.area + ")"
-            p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
-            v = " [VENCIDA]" if s.esta_vencida() else ""
-            print("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
-                  + " | " + p + " | " + s.estado + " | " + r + v)
-        print("Total:", len(res))
+        self._mostrar_solicitudes(res)
         return res
 
     def buscar_por_tipo(self, tipo):
@@ -150,15 +155,7 @@ class Sistema:
         for s in self.lst:
             if s.tipo == tipo:
                 res.append(s)
-        for s in res:
-            r = "Sin asignar"
-            if s.responsable != None:
-                r = s.responsable.nombre + " (" + s.responsable.area + ")"
-            p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
-            v = " [VENCIDA]" if s.esta_vencida() else ""
-            print("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
-                  + " | " + p + " | " + s.estado + " | " + r + v)
-        print("Total:", len(res))
+        self._mostrar_solicitudes(res)
         return res
 
     def buscar_por_estudiante(self, legajo):
@@ -166,29 +163,13 @@ class Sistema:
         for s in self.lst:
             if s.estudiante.legajo == legajo:
                 res.append(s)
-        for s in res:
-            r = "Sin asignar"
-            if s.responsable != None:
-                r = s.responsable.nombre + " (" + s.responsable.area + ")"
-            p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
-            v = " [VENCIDA]" if s.esta_vencida() else ""
-            print("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
-                  + " | " + p + " | " + s.estado + " | " + r + v)
-        print("Total:", len(res))
+        self._mostrar_solicitudes(res)
         return res
 
     # ------------------------------------------------------------------
     # Reporte
     # ------------------------------------------------------------------
-    def reporte(self):
-        print("=" * 60)
-        print("REPORTE DE SOLICITUDES - " + date.today().strftime("%d/%m/%Y"))
-        print("=" * 60)
-        total = len(self.lst)
-        print("Total de solicitudes:", total)
-        if total == 0:
-            print("No hay solicitudes cargadas")
-            return
+    def _contar_por_estado(self):
         c1 = 0
         c2 = 0
         c3 = 0
@@ -202,20 +183,18 @@ class Sistema:
                 c3 += 1
             elif s.estado == "RECHAZADA":
                 c4 += 1
-        print("\nPor estado:")
-        print("  Pendientes: " + str(c1) + " (" + str(round(c1 * 100 / total, 1)) + "%)")
-        print("  En proceso: " + str(c2) + " (" + str(round(c2 * 100 / total, 1)) + "%)")
-        print("  Resueltas:  " + str(c3) + " (" + str(round(c3 * 100 / total, 1)) + "%)")
-        print("  Rechazadas: " + str(c4) + " (" + str(round(c4 * 100 / total, 1)) + "%)")
+        return c1, c2, c3, c4
+
+    def _contar_por_tipo(self):
         t = {}
         for s in self.lst:
             if s.tipo in t:
                 t[s.tipo] += 1
             else:
                 t[s.tipo] = 1
-        print("\nPor tipo:")
-        for k in t:
-            print("  " + k + ": " + str(t[k]))
+        return t
+
+    def _contar_por_prioridad(self):
         a = 0
         m = 0
         b = 0
@@ -226,20 +205,16 @@ class Sistema:
                 m += 1
             else:
                 b += 1
-        print("\nPor prioridad:")
-        print("  Alta:  " + str(a))
-        print("  Media: " + str(m))
-        print("  Baja:  " + str(b))
+        return a, m, b
+
+    def _solicitudes_vencidas(self):
         v = []
         for s in self.lst:
-            if s.estado != "RESUELTA" and s.estado != "RECHAZADA":
-                f = datetime.strptime(s.fecha, "%Y-%m-%d").date()
-                d = (date.today() - f).days
-                if (s.prioridad == 1 and d > 5) or (s.prioridad == 2 and d > 10) or (s.prioridad == 3 and d > 20):
-                    v.append(s)
-        print("\nSolicitudes vencidas: " + str(len(v)))
-        for s in v:
-            print("  #" + str(s.id) + " " + s.tipo + " - " + s.estudiante.apellido + ", " + s.estudiante.nombre)
+            if s.esta_vencida():
+                v.append(s)
+        return v
+
+    def _carga_abierta_por_responsable(self):
         carga = {}
         for s in self.lst:
             if s.responsable != None and s.estado != "RESUELTA" and s.estado != "RECHAZADA":
@@ -247,6 +222,37 @@ class Sistema:
                     carga[s.responsable.nombre] += 1
                 else:
                     carga[s.responsable.nombre] = 1
+        return carga
+    
+    def reporte(self):
+        print("=" * 60)
+        print("REPORTE DE SOLICITUDES - " + date.today().strftime("%d/%m/%Y"))
+        print("=" * 60)
+        total = len(self.lst)
+        print("Total de solicitudes:", total)
+        if total == 0:
+            print("No hay solicitudes cargadas")
+            return
+        c1, c2, c3, c4 = self._contar_por_estado()
+        print("\nPor estado:")
+        print("  Pendientes: " + str(c1) + " (" + str(round(c1 * 100 / total, 1)) + "%)")
+        print("  En proceso: " + str(c2) + " (" + str(round(c2 * 100 / total, 1)) + "%)")
+        print("  Resueltas:  " + str(c3) + " (" + str(round(c3 * 100 / total, 1)) + "%)")
+        print("  Rechazadas: " + str(c4) + " (" + str(round(c4 * 100 / total, 1)) + "%)")
+        t = self._contar_por_tipo()
+        print("\nPor tipo:")
+        for k in t:
+            print("  " + k + ": " + str(t[k]))
+        a, m, b = self._contar_por_prioridad()
+        print("\nPor prioridad:")
+        print("  Alta:  " + str(a))
+        print("  Media: " + str(m))
+        print("  Baja:  " + str(b))
+        v = self._solicitudes_vencidas()
+        print("\nSolicitudes vencidas: " + str(len(v)))
+        for s in v:
+            print("  #" + str(s.id) + " " + s.tipo + " - " + s.estudiante.apellido + ", " + s.estudiante.nombre)
+        carga = self._carga_abierta_por_responsable()
         print("\nCarga abierta por responsable:")
         if len(carga) == 0:
             print("  (ninguna)")
