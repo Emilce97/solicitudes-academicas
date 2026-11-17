@@ -125,24 +125,29 @@ class Sistema:
         self.guardar()
         print("Responsable asignado")
 
-
     # ------------------------------------------------------------------
     # Busquedas
     # ------------------------------------------------------------------
+    def _texto_solicitud(self, s):
+        r = "Sin asignar"
+        if s.responsable != None:
+            r = s.responsable.nombre + " (" + s.responsable.area + ")"
+        p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
+        v = " [VENCIDA]" if s.esta_vencida() else ""
+        return ("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
+                + " | " + p + " | " + s.estado + " | " + r + v)
+
+    def _mostrar_solicitudes(self, res):
+        for s in res:
+            print(self._texto_solicitud(s))
+        print("Total:", len(res))
+
     def buscar_por_estado(self, estado):
         res = []
         for s in self.lst:
             if s.estado == estado:
                 res.append(s)
-        for s in res:
-            r = "Sin asignar"
-            if s.responsable != None:
-                r = s.responsable.nombre + " (" + s.responsable.area + ")"
-            p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
-            v = " [VENCIDA]" if s.esta_vencida() else ""
-            print("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
-                  + " | " + p + " | " + s.estado + " | " + r + v)
-        print("Total:", len(res))
+        self._mostrar_solicitudes(res)
         return res
 
     def buscar_por_tipo(self, tipo):
@@ -150,15 +155,7 @@ class Sistema:
         for s in self.lst:
             if s.tipo == tipo:
                 res.append(s)
-        for s in res:
-            r = "Sin asignar"
-            if s.responsable != None:
-                r = s.responsable.nombre + " (" + s.responsable.area + ")"
-            p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
-            v = " [VENCIDA]" if s.esta_vencida() else ""
-            print("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
-                  + " | " + p + " | " + s.estado + " | " + r + v)
-        print("Total:", len(res))
+        self._mostrar_solicitudes(res)
         return res
 
     def buscar_por_estudiante(self, legajo):
@@ -166,15 +163,7 @@ class Sistema:
         for s in self.lst:
             if s.estudiante.legajo == legajo:
                 res.append(s)
-        for s in res:
-            r = "Sin asignar"
-            if s.responsable != None:
-                r = s.responsable.nombre + " (" + s.responsable.area + ")"
-            p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
-            v = " [VENCIDA]" if s.esta_vencida() else ""
-            print("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
-                  + " | " + p + " | " + s.estado + " | " + r + v)
-        print("Total:", len(res))
+        self._mostrar_solicitudes(res)
         return res
 
     # ------------------------------------------------------------------
