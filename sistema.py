@@ -58,16 +58,16 @@ class Sistema:
     # ------------------------------------------------------------------
     # Operaciones
     # ------------------------------------------------------------------
-    def crear_solicitud(self, legajo, nombre, apellido, email, carrera, tipo, descripcion, prioridad):
+    def crear_solicitud(self, estudiante, tipo, descripcion, prioridad):
         if tipo != "CERTIFICADO" and tipo != "CAMBIO_COMISION" and tipo != "RECLAMO_NOTA" and tipo != "OTRO":
             print("Tipo invalido")
             return None
         est = None
         for e in self.estudiantes:
-            if e.legajo == legajo:
+            if e.legajo == estudiante.legajo:
                 est = e
         if est == None:
-            est = Estudiante(legajo, nombre, apellido, email, carrera)
+            est = estudiante
             self.estudiantes.append(est)
         if prioridad < 1 or prioridad > 3:
             prioridad = 2
@@ -294,16 +294,13 @@ class Sistema:
                     apellido = input("Apellido: ")
                     email = input("Email: ")
                     carrera = input("Carrera: ")
+                    est = Estudiante(legajo, nombre, apellido, email, carrera)
                 else:
-                    nombre = est.nombre
-                    apellido = est.apellido
-                    email = est.email
-                    carrera = est.carrera
-                    print("Estudiante: " + apellido + ", " + nombre)
+                    print("Estudiante: " + est.apellido + ", " + est.nombre)
                 tipo = input("Tipo (CERTIFICADO, CAMBIO_COMISION, RECLAMO_NOTA, OTRO): ").upper()
                 descripcion = input("Descripcion: ")
                 prioridad = int(input("Prioridad (1=Alta, 2=Media, 3=Baja): "))
-                self.crear_solicitud(legajo, nombre, apellido, email, carrera, tipo, descripcion, prioridad)
+                self.crear_solicitud(est, tipo, descripcion, prioridad)
             elif op == "2":
                 id = int(input("Id de solicitud: "))
                 nuevo = input("Nuevo estado (EN_PROCESO, RESUELTA, RECHAZADA): ").upper()
