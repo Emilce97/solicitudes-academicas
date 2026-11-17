@@ -206,7 +206,14 @@ class Sistema:
             else:
                 b += 1
         return a, m, b
-    
+
+    def _solicitudes_vencidas(self):
+        v = []
+        for s in self.lst:
+            if s.esta_vencida():
+                v.append(s)
+        return v
+
     def reporte(self):
         print("=" * 60)
         print("REPORTE DE SOLICITUDES - " + date.today().strftime("%d/%m/%Y"))
@@ -231,13 +238,7 @@ class Sistema:
         print("  Alta:  " + str(a))
         print("  Media: " + str(m))
         print("  Baja:  " + str(b))
-        v = []
-        for s in self.lst:
-            if s.estado != "RESUELTA" and s.estado != "RECHAZADA":
-                f = datetime.strptime(s.fecha, "%Y-%m-%d").date()
-                d = (date.today() - f).days
-                if (s.prioridad == 1 and d > 5) or (s.prioridad == 2 and d > 10) or (s.prioridad == 3 and d > 20):
-                    v.append(s)
+        v = self._solicitudes_vencidas()
         print("\nSolicitudes vencidas: " + str(len(v)))
         for s in v:
             print("  #" + str(s.id) + " " + s.tipo + " - " + s.estudiante.apellido + ", " + s.estudiante.nombre)
