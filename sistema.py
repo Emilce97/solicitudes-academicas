@@ -125,19 +125,6 @@ class Sistema:
         self.guardar()
         print("Responsable asignado")
 
-    def dias(self, s):
-        f = datetime.strptime(s.fecha, "%Y-%m-%d").date()
-        return (date.today() - f).days
-
-    def vencida(self, s):
-        if s.estado == "RESUELTA" or s.estado == "RECHAZADA":
-            return False
-        if s.prioridad == 1:
-            return self.dias(s) > 5
-        elif s.prioridad == 2:
-            return self.dias(s) > 10
-        else:
-            return self.dias(s) > 20
 
     # ------------------------------------------------------------------
     # Busquedas
@@ -152,7 +139,7 @@ class Sistema:
             if s.responsable != None:
                 r = s.responsable.nombre + " (" + s.responsable.area + ")"
             p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
-            v = " [VENCIDA]" if self.vencida(s) else ""
+            v = " [VENCIDA]" if s.esta_vencida() else ""
             print("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
                   + " | " + p + " | " + s.estado + " | " + r + v)
         print("Total:", len(res))
@@ -168,7 +155,7 @@ class Sistema:
             if s.responsable != None:
                 r = s.responsable.nombre + " (" + s.responsable.area + ")"
             p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
-            v = " [VENCIDA]" if self.vencida(s) else ""
+            v = " [VENCIDA]" if s.esta_vencida() else ""
             print("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
                   + " | " + p + " | " + s.estado + " | " + r + v)
         print("Total:", len(res))
@@ -184,7 +171,7 @@ class Sistema:
             if s.responsable != None:
                 r = s.responsable.nombre + " (" + s.responsable.area + ")"
             p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
-            v = " [VENCIDA]" if self.vencida(s) else ""
+            v = " [VENCIDA]" if s.esta_vencida() else ""
             print("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
                   + " | " + p + " | " + s.estado + " | " + r + v)
         print("Total:", len(res))
