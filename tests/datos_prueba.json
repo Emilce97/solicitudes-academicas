@@ -1,0 +1,27 @@
+{
+  "estudiantes": [
+    {"legajo": "10001", "nombre": "Lucia", "apellido": "Ferrero", "email": "lucia.ferrero@ejemplo.com", "carrera": "TUP"},
+    {"legajo": "10002", "nombre": "Mateo", "apellido": "Quiroga", "email": "mateo.quiroga@ejemplo.com", "carrera": "TUP"},
+    {"legajo": "10003", "nombre": "Valentina", "apellido": "Ibarra", "email": "valentina.ibarra@ejemplo.com", "carrera": "TUP"},
+    {"legajo": "10004", "nombre": "Tomas", "apellido": "Benitez", "email": "tomas.benitez@ejemplo.com", "carrera": "TUP"},
+    {"legajo": "10005", "nombre": "Camila", "apellido": "Rossi", "email": "camila.rossi@ejemplo.com", "carrera": "TUP"},
+    {"legajo": "10006", "nombre": "Joaquin", "apellido": "Mendez", "email": "joaquin.mendez@ejemplo.com", "carrera": "TUP"}
+  ],
+  "responsables": [
+    {"id": 1, "nombre": "Ana Paredes", "area": "Bedelia"},
+    {"id": 2, "nombre": "Marcos Lugo", "area": "Coordinacion academica"},
+    {"id": 3, "nombre": "Sofia Arce", "area": "Secretaria de alumnos"},
+    {"id": 4, "nombre": "Diego Villalba", "area": "Tutoria"}
+  ],
+  "solicitudes": [
+    {"id": 1, "legajo": "10001", "tipo": "CERTIFICADO", "descripcion": "Certificado de alumno regular", "prioridad": 2, "estado": "RESUELTA", "fecha": "2026-10-02", "responsable": 1},
+    {"id": 2, "legajo": "10002", "tipo": "CAMBIO_COMISION", "descripcion": "Cambio de comision por horario laboral", "prioridad": 1, "estado": "EN_PROCESO", "fecha": "2026-10-20", "responsable": 2},
+    {"id": 3, "legajo": "10003", "tipo": "RECLAMO_NOTA", "descripcion": "Revision de nota del parcial 2", "prioridad": 1, "estado": "PENDIENTE", "fecha": "2026-10-28", "responsable": null},
+    {"id": 4, "legajo": "10001", "tipo": "OTRO", "descripcion": "Consulta por equivalencias", "prioridad": 3, "estado": "PENDIENTE", "fecha": "2026-10-05", "responsable": null},
+    {"id": 5, "legajo": "10004", "tipo": "CERTIFICADO", "descripcion": "Certificado de materias aprobadas", "prioridad": 2, "estado": "EN_PROCESO", "fecha": "2026-11-03", "responsable": 3},
+    {"id": 6, "legajo": "10005", "tipo": "RECLAMO_NOTA", "descripcion": "Nota del TP no cargada en el campus", "prioridad": 2, "estado": "RECHAZADA", "fecha": "2026-10-10", "responsable": 4},
+    {"id": 7, "legajo": "10006", "tipo": "CAMBIO_COMISION", "descripcion": "Pase a comision nocturna", "prioridad": 3, "estado": "PENDIENTE", "fecha": "2026-11-10", "responsable": null},
+    {"id": 8, "legajo": "10002", "tipo": "CERTIFICADO", "descripcion": "Constancia de examen final", "prioridad": 1, "estado": "RESUELTA", "fecha": "2026-11-05", "responsable": 1},
+    {"id": 9, "legajo": "10003", "tipo": "OTRO", "descripcion": "Solicitud de prorroga de entrega", "prioridad": 2, "estado": "EN_PROCESO", "fecha": "2026-10-25", "responsable": 4}
+  ]
+}
