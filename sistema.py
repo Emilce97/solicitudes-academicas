@@ -214,6 +214,16 @@ class Sistema:
                 v.append(s)
         return v
 
+    def _carga_abierta_por_responsable(self):
+        carga = {}
+        for s in self.lst:
+            if s.responsable != None and s.estado != "RESUELTA" and s.estado != "RECHAZADA":
+                if s.responsable.nombre in carga:
+                    carga[s.responsable.nombre] += 1
+                else:
+                    carga[s.responsable.nombre] = 1
+        return carga
+    
     def reporte(self):
         print("=" * 60)
         print("REPORTE DE SOLICITUDES - " + date.today().strftime("%d/%m/%Y"))
@@ -242,13 +252,7 @@ class Sistema:
         print("\nSolicitudes vencidas: " + str(len(v)))
         for s in v:
             print("  #" + str(s.id) + " " + s.tipo + " - " + s.estudiante.apellido + ", " + s.estudiante.nombre)
-        carga = {}
-        for s in self.lst:
-            if s.responsable != None and s.estado != "RESUELTA" and s.estado != "RECHAZADA":
-                if s.responsable.nombre in carga:
-                    carga[s.responsable.nombre] += 1
-                else:
-                    carga[s.responsable.nombre] = 1
+        carga = self._carga_abierta_por_responsable()
         print("\nCarga abierta por responsable:")
         if len(carga) == 0:
             print("  (ninguna)")
