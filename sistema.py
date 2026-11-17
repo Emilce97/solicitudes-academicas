@@ -7,9 +7,9 @@ ARCHIVO = "datos.json"
 
 class Sistema:
     def __init__(self):
-        self.lst = []
+        self.solicitudes = []
         self.estudiantes = []
-        self.resp = []
+        self.responsables = []
         self.cargar()
 
     # ------------------------------------------------------------------
@@ -23,17 +23,17 @@ class Sistema:
             for e in d["estudiantes"]:
                 self.estudiantes.append(Estudiante(e["legajo"], e["nombre"], e["apellido"], e["email"], e["carrera"]))
             for r in d["responsables"]:
-                self.resp.append(Responsable(r["id"], r["nombre"], r["area"]))
+                self.responsables.append(Responsable(r["id"], r["nombre"], r["area"]))
             for s in d["solicitudes"]:
                 est = None
                 for e in self.estudiantes:
                     if e.legajo == s["legajo"]:
                         est = e
                 r = None
-                for x in self.resp:
+                for x in self.responsables:
                     if x.id == s["responsable"]:
                         r = x
-                self.lst.append(Solicitud(s["id"], est, s["tipo"], s["descripcion"], s["prioridad"], s["estado"], s["fecha"], r))
+                self.solicitudes.append(Solicitud(s["id"], est, s["tipo"], s["descripcion"], s["prioridad"], s["estado"], s["fecha"], r))
         except:
             pass
 
@@ -42,9 +42,9 @@ class Sistema:
         for e in self.estudiantes:
             d["estudiantes"].append({"legajo": e.legajo, "nombre": e.nombre, "apellido": e.apellido,
                                      "email": e.email, "carrera": e.carrera})
-        for r in self.resp:
+        for r in self.responsables:
             d["responsables"].append({"id": r.id, "nombre": r.nombre, "area": r.area})
-        for s in self.lst:
+        for s in self.solicitudes:
             rid = None
             if s.responsable != None:
                 rid = s.responsable.id
@@ -72,19 +72,19 @@ class Sistema:
         if prioridad < 1 or prioridad > 3:
             prioridad = 2
         id = 1
-        for s in self.lst:
+        for s in self.solicitudes:
             if s.id >= id:
                 id = s.id + 1
         hoy = date.today().isoformat()
         s = Solicitud(id, est, tipo, descripcion, prioridad, "PENDIENTE", hoy)
-        self.lst.append(s)
+        self.solicitudes.append(s)
         self.guardar()
         print("Solicitud creada con id", id)
         return s
 
     def cambiar_estado(self, id, nuevo):
         s = None
-        for x in self.lst:
+        for x in self.solicitudes:
             if x.id == id:
                 s = x
         if s == None:
@@ -105,14 +105,14 @@ class Sistema:
 
     def asignar_responsable(self, id, id_resp):
         s = None
-        for x in self.lst:
+        for x in self.solicitudes:
             if x.id == id:
                 s = x
         if s == None:
             print("No existe la solicitud")
             return
         r = None
-        for x in self.resp:
+        for x in self.responsables:
             if x.id == id_resp:
                 r = x
         if r == None:
@@ -144,7 +144,7 @@ class Sistema:
 
     def buscar_por_estado(self, estado):
         res = []
-        for s in self.lst:
+        for s in self.solicitudes:
             if s.estado == estado:
                 res.append(s)
         self._mostrar_solicitudes(res)
@@ -152,7 +152,7 @@ class Sistema:
 
     def buscar_por_tipo(self, tipo):
         res = []
-        for s in self.lst:
+        for s in self.solicitudes:
             if s.tipo == tipo:
                 res.append(s)
         self._mostrar_solicitudes(res)
@@ -160,7 +160,7 @@ class Sistema:
 
     def buscar_por_estudiante(self, legajo):
         res = []
-        for s in self.lst:
+        for s in self.solicitudes:
             if s.estudiante.legajo == legajo:
                 res.append(s)
         self._mostrar_solicitudes(res)
@@ -174,7 +174,7 @@ class Sistema:
         c2 = 0
         c3 = 0
         c4 = 0
-        for s in self.lst:
+        for s in self.solicitudes:
             if s.estado == "PENDIENTE":
                 c1 += 1
             elif s.estado == "EN_PROCESO":
@@ -187,7 +187,7 @@ class Sistema:
 
     def _contar_por_tipo(self):
         t = {}
-        for s in self.lst:
+        for s in self.solicitudes:
             if s.tipo in t:
                 t[s.tipo] += 1
             else:
@@ -198,7 +198,7 @@ class Sistema:
         a = 0
         m = 0
         b = 0
-        for s in self.lst:
+        for s in self.solicitudes:
             if s.prioridad == 1:
                 a += 1
             elif s.prioridad == 2:
@@ -209,14 +209,14 @@ class Sistema:
 
     def _solicitudes_vencidas(self):
         v = []
-        for s in self.lst:
+        for s in self.solicitudes:
             if s.esta_vencida():
                 v.append(s)
         return v
 
     def _carga_abierta_por_responsable(self):
         carga = {}
-        for s in self.lst:
+        for s in self.solicitudes:
             if s.responsable != None and s.estado != "RESUELTA" and s.estado != "RECHAZADA":
                 if s.responsable.nombre in carga:
                     carga[s.responsable.nombre] += 1
@@ -228,7 +228,7 @@ class Sistema:
         print("=" * 60)
         print("REPORTE DE SOLICITUDES - " + date.today().strftime("%d/%m/%Y"))
         print("=" * 60)
-        total = len(self.lst)
+        total = len(self.solicitudes)
         print("Total de solicitudes:", total)
         if total == 0:
             print("No hay solicitudes cargadas")
@@ -300,7 +300,7 @@ class Sistema:
                 self.cambiar_estado(id, nuevo)
             elif op == "3":
                 id = int(input("Id de solicitud: "))
-                for r in self.resp:
+                for r in self.responsables:
                     print("  " + str(r.id) + ". " + r.nombre + " (" + r.area + ")")
                 id_resp = int(input("Id de responsable: "))
                 self.asignar_responsable(id, id_resp)
@@ -316,7 +316,7 @@ class Sistema:
             elif op == "7":
                 self.reporte()
             elif op == "8":
-                for r in self.resp:
+                for r in self.responsables:
                     print("  " + str(r.id) + ". " + r.nombre + " (" + r.area + ")")
             elif op == "0":
                 print("Hasta luego")
