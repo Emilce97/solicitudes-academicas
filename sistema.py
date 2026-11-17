@@ -185,6 +185,28 @@ class Sistema:
                 c4 += 1
         return c1, c2, c3, c4
 
+    def _contar_por_tipo(self):
+        t = {}
+        for s in self.lst:
+            if s.tipo in t:
+                t[s.tipo] += 1
+            else:
+                t[s.tipo] = 1
+        return t
+
+    def _contar_por_prioridad(self):
+        a = 0
+        m = 0
+        b = 0
+        for s in self.lst:
+            if s.prioridad == 1:
+                a += 1
+            elif s.prioridad == 2:
+                m += 1
+            else:
+                b += 1
+        return a, m, b
+    
     def reporte(self):
         print("=" * 60)
         print("REPORTE DE SOLICITUDES - " + date.today().strftime("%d/%m/%Y"))
@@ -200,25 +222,11 @@ class Sistema:
         print("  En proceso: " + str(c2) + " (" + str(round(c2 * 100 / total, 1)) + "%)")
         print("  Resueltas:  " + str(c3) + " (" + str(round(c3 * 100 / total, 1)) + "%)")
         print("  Rechazadas: " + str(c4) + " (" + str(round(c4 * 100 / total, 1)) + "%)")
-        t = {}
-        for s in self.lst:
-            if s.tipo in t:
-                t[s.tipo] += 1
-            else:
-                t[s.tipo] = 1
+        t = self._contar_por_tipo()
         print("\nPor tipo:")
         for k in t:
             print("  " + k + ": " + str(t[k]))
-        a = 0
-        m = 0
-        b = 0
-        for s in self.lst:
-            if s.prioridad == 1:
-                a += 1
-            elif s.prioridad == 2:
-                m += 1
-            else:
-                b += 1
+        a, m, b = self._contar_por_prioridad()
         print("\nPor prioridad:")
         print("  Alta:  " + str(a))
         print("  Media: " + str(m))
