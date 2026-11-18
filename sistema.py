@@ -1,6 +1,8 @@
 import json
 from datetime import datetime, date
-from modelos import Estudiante, Responsable, Solicitud, PRIORIDAD_ALTA, PRIORIDAD_MEDIA, PLAZO_BAJA, PLAZO_ALTA, PLAZO_MEDIA, PRIORIDAD_BAJA
+from modelos import (Estudiante, Responsable, Solicitud,
+                     PRIORIDAD_ALTA, PRIORIDAD_MEDIA, PRIORIDAD_BAJA,
+                     ESTADO_PENDIENTE, ESTADO_EN_PROCESO, ESTADO_RESUELTA, ESTADO_RECHAZADA)
 
 ARCHIVO = "datos.json"
 
@@ -76,7 +78,7 @@ class Sistema:
             if s.id >= nuevo_id:
                 nuevo_id = s.id + 1
         hoy = date.today().isoformat()
-        s = Solicitud(nuevo_id, est, tipo, descripcion, prioridad, "PENDIENTE", hoy)
+        s = Solicitud(nuevo_id, est, tipo, descripcion, prioridad, ESTADO_PENDIENTE, hoy)
         self.solicitudes.append(s)
         self.guardar()
         print("Solicitud creada con id", nuevo_id)
@@ -90,12 +92,12 @@ class Sistema:
         if s == None:
             print("No existe la solicitud")
             return
-        if nuevo == "EN_PROCESO" and s.responsable == None:
+        if nuevo == ESTADO_EN_PROCESO and s.responsable == None:
             print("Debe asignar un responsable primero")
             return
-        if s.estado == "PENDIENTE" and (nuevo == "EN_PROCESO" or nuevo == "RECHAZADA"):
+        if s.estado == ESTADO_PENDIENTE and (nuevo == ESTADO_EN_PROCESO or nuevo == ESTADO_RECHAZADA):
             s.estado = nuevo
-        elif s.estado == "EN_PROCESO" and (nuevo == "RESUELTA" or nuevo == "RECHAZADA"):
+        elif s.estado == ESTADO_EN_PROCESO and (nuevo == ESTADO_RESUELTA or nuevo == ESTADO_RECHAZADA):
             s.estado = nuevo
         else:
             print("Cambio de estado no permitido")
@@ -118,7 +120,7 @@ class Sistema:
         if r == None:
             print("No existe el responsable")
             return
-        if s.estado == "RESUELTA" or s.estado == "RECHAZADA":
+        if s.estado == ESTADO_RESUELTA or s.estado == ESTADO_RECHAZADA:
             print("La solicitud ya esta cerrada")
             return
         s.responsable = r
@@ -175,13 +177,13 @@ class Sistema:
         resueltas = 0
         rechazadas = 0
         for s in self.solicitudes:
-            if s.estado == "PENDIENTE":
+            if s.estado == ESTADO_PENDIENTE:
                 pendientes += 1
-            elif s.estado == "EN_PROCESO":
+            elif s.estado == ESTADO_EN_PROCESO:
                 en_proceso += 1
-            elif s.estado == "RESUELTA":
+            elif s.estado == ESTADO_RESUELTA:
                 resueltas += 1
-            elif s.estado == "RECHAZADA":
+            elif s.estado == ESTADO_RECHAZADA:
                 rechazadas += 1
         return pendientes, en_proceso, resueltas, rechazadas
 
@@ -217,7 +219,7 @@ class Sistema:
     def _carga_abierta_por_responsable(self):
         carga = {}
         for s in self.solicitudes:
-            if s.responsable != None and s.estado != "RESUELTA" and s.estado != "RECHAZADA":
+            if s.responsable != None and s.estado != ESTADO_RESUELTA and s.estado != ESTADO_RECHAZADA:
                 if s.responsable.nombre in carga:
                     carga[s.responsable.nombre] += 1
                 else:

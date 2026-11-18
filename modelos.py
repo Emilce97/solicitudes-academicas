@@ -10,6 +10,12 @@ PLAZO_ALTA = 5
 PLAZO_MEDIA = 10
 PLAZO_BAJA = 20
 
+# Estados de una solicitud
+ESTADO_PENDIENTE = "PENDIENTE"
+ESTADO_EN_PROCESO = "EN_PROCESO"
+ESTADO_RESUELTA = "RESUELTA"
+ESTADO_RECHAZADA = "RECHAZADA"
+
 
 class Estudiante:
     def __init__(self, legajo, nombre, apellido, email, carrera):
@@ -43,11 +49,11 @@ class Solicitud:
         return (date.today() - f).days
 
     def esta_vencida(self):
-        if self.estado == "RESUELTA" or self.estado == "RECHAZADA":
+        if self.estado == ESTADO_RESUELTA or self.estado == ESTADO_RECHAZADA:
             return False
         if self.prioridad == PRIORIDAD_ALTA:
             return self.dias_transcurridos() > PLAZO_ALTA
         elif self.prioridad == PRIORIDAD_MEDIA:
-            return self.dias_transcurridos() > PRIORIDAD_MEDIA
+            return self.dias_transcurridos() > PLAZO_MEDIA
         else:
             return self.dias_transcurridos() > PLAZO_BAJA
