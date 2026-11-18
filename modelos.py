@@ -16,6 +16,9 @@ ESTADO_EN_PROCESO = "EN_PROCESO"
 ESTADO_RESUELTA = "RESUELTA"
 ESTADO_RECHAZADA = "RECHAZADA"
 
+# Tipos de solicitud válidos.
+TIPOS_VALIDOS = ("CERTIFICADO", "CAMBIO_COMISION", "RECLAMO_NOTA", "OTRO")
+
 
 class Estudiante:
     def __init__(self, legajo, nombre, apellido, email, carrera):

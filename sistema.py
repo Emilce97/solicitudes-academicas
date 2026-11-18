@@ -2,7 +2,8 @@ import json
 from datetime import datetime, date
 from modelos import (Estudiante, Responsable, Solicitud,
                      PRIORIDAD_ALTA, PRIORIDAD_MEDIA, PRIORIDAD_BAJA,
-                     ESTADO_PENDIENTE, ESTADO_EN_PROCESO, ESTADO_RESUELTA, ESTADO_RECHAZADA)
+                     ESTADO_PENDIENTE, ESTADO_EN_PROCESO, ESTADO_RESUELTA, ESTADO_RECHAZADA,
+                     TIPOS_VALIDOS)
 
 ARCHIVO = "datos.json"
 
@@ -61,7 +62,7 @@ class Sistema:
     # Operaciones
     # ------------------------------------------------------------------
     def crear_solicitud(self, estudiante, tipo, descripcion, prioridad):
-        if tipo != "CERTIFICADO" and tipo != "CAMBIO_COMISION" and tipo != "RECLAMO_NOTA" and tipo != "OTRO":
+        if tipo not in TIPOS_VALIDOS:
             print("Tipo invalido")
             return None
         est = None
