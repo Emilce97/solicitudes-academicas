@@ -20,14 +20,14 @@ class Sistema:
     # ------------------------------------------------------------------
     def cargar(self):
         try:
-            f = open(ARCHIVO, "r", encoding="utf-8")
-            d = json.load(f)
-            f.close()
-            for e in d["estudiantes"]:
+            archivo = open(ARCHIVO, "r", encoding="utf-8")
+            datos = json.load(archivo)
+            archivo.close()
+            for e in datos["estudiantes"]:
                 self.estudiantes.append(Estudiante(e["legajo"], e["nombre"], e["apellido"], e["email"], e["carrera"]))
-            for r in d["responsables"]:
+            for r in datos["responsables"]:
                 self.responsables.append(Responsable(r["id"], r["nombre"], r["area"]))
-            for s in d["solicitudes"]:
+            for s in datos["solicitudes"]:
                 est = None
                 for e in self.estudiantes:
                     if e.legajo == s["legajo"]:
@@ -41,21 +41,21 @@ class Sistema:
             pass
 
     def guardar(self):
-        d = {"estudiantes": [], "responsables": [], "solicitudes": []}
+        datos = {"estudiantes": [], "responsables": [], "solicitudes": []}
         for e in self.estudiantes:
-            d["estudiantes"].append({"legajo": e.legajo, "nombre": e.nombre, "apellido": e.apellido,
+            datos["estudiantes"].append({"legajo": e.legajo, "nombre": e.nombre, "apellido": e.apellido,
                                      "email": e.email, "carrera": e.carrera})
         for r in self.responsables:
-            d["responsables"].append({"id": r.id, "nombre": r.nombre, "area": r.area})
+            datos["responsables"].append({"id": r.id, "nombre": r.nombre, "area": r.area})
         for s in self.solicitudes:
-            rid = None
+            id_responsable = None
             if s.responsable != None:
-                rid = s.responsable.id
-            d["solicitudes"].append({"id": s.id, "legajo": s.estudiante.legajo, "tipo": s.tipo,
+                id_responsable = s.responsable.id
+            datos["solicitudes"].append({"id": s.id, "legajo": s.estudiante.legajo, "tipo": s.tipo,
                                      "descripcion": s.descripcion, "prioridad": s.prioridad,
-                                     "estado": s.estado, "fecha": s.fecha, "responsable": rid})
+                                     "estado": s.estado, "fecha": s.fecha, "responsable": id_responsable})
         f = open(ARCHIVO, "w", encoding="utf-8")
-        json.dump(d, f, indent=2, ensure_ascii=False)
+        json.dump(datos, f, indent=2, ensure_ascii=False)
         f.close()
 
     # ------------------------------------------------------------------
@@ -132,13 +132,13 @@ class Sistema:
     # Busquedas
     # ------------------------------------------------------------------
     def _texto_solicitud(self, s):
-        r = "Sin asignar"
+        texto_responsable = "Sin asignar"
         if s.responsable != None:
-            r = s.responsable.nombre + " (" + s.responsable.area + ")"
-        p = "Alta" if s.prioridad == PRIORIDAD_ALTA else ("Media" if s.prioridad == PRIORIDAD_MEDIA else "Baja")
-        v = " [VENCIDA]" if s.esta_vencida() else ""
+            texto_responsable = s.responsable.nombre + " (" + s.responsable.area + ")"
+        texto_prioridad = "Alta" if s.prioridad == PRIORIDAD_ALTA else ("Media" if s.prioridad == PRIORIDAD_MEDIA else "Baja")
+        marca_vencida = " [VENCIDA]" if s.esta_vencida() else ""
         return ("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
-                + " | " + p + " | " + s.estado + " | " + r + v)
+                + " | " + texto_prioridad + " | " + s.estado + " | " + texto_responsable + marca_vencida)
 
     def _mostrar_solicitudes(self, res):
         for s in res:
