@@ -28,15 +28,15 @@ class Sistema:
             for r in datos["responsables"]:
                 self.responsables.append(Responsable(r["id"], r["nombre"], r["area"]))
             for s in datos["solicitudes"]:
-                est = None
+                estudiante = None
                 for e in self.estudiantes:
                     if e.legajo == s["legajo"]:
-                        est = e
+                        estudiante = e
                 r = None
                 for x in self.responsables:
                     if x.id == s["responsable"]:
                         r = x
-                self.solicitudes.append(Solicitud(s["id"], est, s["tipo"], s["descripcion"], s["prioridad"], s["estado"], s["fecha"], r))
+                self.solicitudes.append(Solicitud(s["id"], estudiante, s["tipo"], s["descripcion"], s["prioridad"], s["estado"], s["fecha"], r))
         except:
             pass
 
@@ -65,13 +65,13 @@ class Sistema:
         if tipo not in TIPOS_VALIDOS:
             print("Tipo invalido")
             return None
-        est = None
+        estudiante_encontrado = None
         for e in self.estudiantes:
             if e.legajo == estudiante.legajo:
-                est = e
-        if est == None:
-            est = estudiante
-            self.estudiantes.append(est)
+                estudiante_encontrado = e
+        if estudiante_encontrado == None:
+            estudiante_encontrado = estudiante
+            self.estudiantes.append(estudiante_encontrado)
         if prioridad < PRIORIDAD_ALTA or prioridad > PRIORIDAD_BAJA:
             prioridad = PRIORIDAD_MEDIA
         nuevo_id = 1
@@ -79,13 +79,13 @@ class Sistema:
             if s.id >= nuevo_id:
                 nuevo_id = s.id + 1
         hoy = date.today().isoformat()
-        s = Solicitud(nuevo_id, est, tipo, descripcion, prioridad, ESTADO_PENDIENTE, hoy)
+        s = Solicitud(nuevo_id, estudiante_encontrado, tipo, descripcion, prioridad, ESTADO_PENDIENTE, hoy)
         self.solicitudes.append(s)
         self.guardar()
         print("Solicitud creada con id", nuevo_id)
         return s
 
-    def cambiar_estado(self, id_solicitud, nuevo):
+    def cambiar_estado(self, id_solicitud, nuevo_estado):
         s = None
         for x in self.solicitudes:
             if x.id == id_solicitud:
@@ -93,13 +93,13 @@ class Sistema:
         if s == None:
             print("No existe la solicitud")
             return
-        if nuevo == ESTADO_EN_PROCESO and s.responsable == None:
+        if nuevo_estado == ESTADO_EN_PROCESO and s.responsable == None:
             print("Debe asignar un responsable primero")
             return
-        if s.estado == ESTADO_PENDIENTE and (nuevo == ESTADO_EN_PROCESO or nuevo == ESTADO_RECHAZADA):
-            s.estado = nuevo
-        elif s.estado == ESTADO_EN_PROCESO and (nuevo == ESTADO_RESUELTA or nuevo == ESTADO_RECHAZADA):
-            s.estado = nuevo
+        if s.estado == ESTADO_PENDIENTE and (nuevo_estado == ESTADO_EN_PROCESO or nuevo_estado == ESTADO_RECHAZADA):
+            s.estado = nuevo_estado
+        elif s.estado == ESTADO_EN_PROCESO and (nuevo_estado == ESTADO_RESUELTA or nuevo_estado == ESTADO_RECHAZADA):
+            s.estado = nuevo_estado
         else:
             print("Cambio de estado no permitido")
             return
@@ -140,34 +140,34 @@ class Sistema:
         return ("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
                 + " | " + texto_prioridad + " | " + s.estado + " | " + texto_responsable + marca_vencida)
 
-    def _mostrar_solicitudes(self, res):
-        for s in res:
+    def _mostrar_solicitudes(self, resultados):
+        for s in resultados:
             print(self._texto_solicitud(s))
-        print("Total:", len(res))
+        print("Total:", len(resultados))
 
     def buscar_por_estado(self, estado):
-        res = []
+        resultados = []
         for s in self.solicitudes:
             if s.estado == estado:
-                res.append(s)
-        self._mostrar_solicitudes(res)
-        return res
+                resultados.append(s)
+        self._mostrar_solicitudes(resultados)
+        return resultados
 
     def buscar_por_tipo(self, tipo):
-        res = []
+        resultados = []
         for s in self.solicitudes:
             if s.tipo == tipo:
-                res.append(s)
-        self._mostrar_solicitudes(res)
-        return res
+                resultados.append(s)
+        self._mostrar_solicitudes(resultados)
+        return resultados
 
     def buscar_por_estudiante(self, legajo):
-        res = []
+        resultados = []
         for s in self.solicitudes:
             if s.estudiante.legajo == legajo:
-                res.append(s)
-        self._mostrar_solicitudes(res)
-        return res
+                resultados.append(s)
+        self._mostrar_solicitudes(resultados)
+        return resultados
 
     # ------------------------------------------------------------------
     # Reporte
@@ -281,26 +281,26 @@ class Sistema:
             op = input("Opcion: ")
             if op == "1":
                 legajo = input("Legajo: ")
-                est = None
+                estudiante = None
                 for e in self.estudiantes:
                     if e.legajo == legajo:
-                        est = e
-                if est == None:
+                        estudiante = e
+                if estudiante == None:
                     nombre = input("Nombre: ")
                     apellido = input("Apellido: ")
                     email = input("Email: ")
                     carrera = input("Carrera: ")
-                    est = Estudiante(legajo, nombre, apellido, email, carrera)
+                    estudiante = Estudiante(legajo, nombre, apellido, email, carrera)
                 else:
-                    print("Estudiante: " + est.apellido + ", " + est.nombre)
+                    print("Estudiante: " + estudiante.apellido + ", " + estudiante.nombre)
                 tipo = input("Tipo (CERTIFICADO, CAMBIO_COMISION, RECLAMO_NOTA, OTRO): ").upper()
                 descripcion = input("Descripcion: ")
                 prioridad = int(input("Prioridad (1=Alta, 2=Media, 3=Baja): "))
-                self.crear_solicitud(est, tipo, descripcion, prioridad)
+                self.crear_solicitud(estudiante, tipo, descripcion, prioridad)
             elif op == "2":
                 id_solicitud = int(input("Id de solicitud: "))
-                nuevo = input("Nuevo estado (EN_PROCESO, RESUELTA, RECHAZADA): ").upper()
-                self.cambiar_estado(id_solicitud, nuevo)
+                nuevo_estado = input("Nuevo estado (EN_PROCESO, RESUELTA, RECHAZADA): ").upper()
+                self.cambiar_estado(id_solicitud, nuevo_estado)
             elif op == "3":
                 id_solicitud = int(input("Id de solicitud: "))
                 for r in self.responsables:
