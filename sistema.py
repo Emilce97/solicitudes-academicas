@@ -71,21 +71,21 @@ class Sistema:
             self.estudiantes.append(est)
         if prioridad < 1 or prioridad > 3:
             prioridad = 2
-        id = 1
+        nuevo_id = 1
         for s in self.solicitudes:
-            if s.id >= id:
-                id = s.id + 1
+            if s.id >= nuevo_id:
+                nuevo_id = s.id + 1
         hoy = date.today().isoformat()
-        s = Solicitud(id, est, tipo, descripcion, prioridad, "PENDIENTE", hoy)
+        s = Solicitud(nuevo_id, est, tipo, descripcion, prioridad, "PENDIENTE", hoy)
         self.solicitudes.append(s)
         self.guardar()
-        print("Solicitud creada con id", id)
+        print("Solicitud creada con id", nuevo_id)
         return s
 
-    def cambiar_estado(self, id, nuevo):
+    def cambiar_estado(self, id_solicitud, nuevo):
         s = None
         for x in self.solicitudes:
-            if x.id == id:
+            if x.id == id_solicitud:
                 s = x
         if s == None:
             print("No existe la solicitud")
@@ -103,17 +103,17 @@ class Sistema:
         self.guardar()
         print("Estado actualizado")
 
-    def asignar_responsable(self, id, id_resp):
+    def asignar_responsable(self, id_solicitud, id_responsable):
         s = None
         for x in self.solicitudes:
-            if x.id == id:
+            if x.id == id_solicitud:
                 s = x
         if s == None:
             print("No existe la solicitud")
             return
         r = None
         for x in self.responsables:
-            if x.id == id_resp:
+            if x.id == id_responsable:
                 r = x
         if r == None:
             print("No existe el responsable")
@@ -295,15 +295,15 @@ class Sistema:
                 prioridad = int(input("Prioridad (1=Alta, 2=Media, 3=Baja): "))
                 self.crear_solicitud(est, tipo, descripcion, prioridad)
             elif op == "2":
-                id = int(input("Id de solicitud: "))
+                id_solicitud = int(input("Id de solicitud: "))
                 nuevo = input("Nuevo estado (EN_PROCESO, RESUELTA, RECHAZADA): ").upper()
-                self.cambiar_estado(id, nuevo)
+                self.cambiar_estado(id_solicitud, nuevo)
             elif op == "3":
-                id = int(input("Id de solicitud: "))
+                id_solicitud = int(input("Id de solicitud: "))
                 for r in self.responsables:
                     print("  " + str(r.id) + ". " + r.nombre + " (" + r.area + ")")
-                id_resp = int(input("Id de responsable: "))
-                self.asignar_responsable(id, id_resp)
+                id_responsable = int(input("Id de responsable: "))
+                self.asignar_responsable(id_solicitud, id_responsable)
             elif op == "4":
                 estado = input("Estado (PENDIENTE, EN_PROCESO, RESUELTA, RECHAZADA): ").upper()
                 self.buscar_por_estado(estado)
