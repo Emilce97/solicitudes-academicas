@@ -48,8 +48,8 @@ class Solicitud:
         self.responsable = responsable
 
     def dias_transcurridos(self):
-        f = datetime.strptime(self.fecha, "%Y-%m-%d").date()
-        return (date.today() - f).days
+        fecha_alta = datetime.strptime(self.fecha, "%Y-%m-%d").date()
+        return (date.today() - fecha_alta).days
 
     def esta_vencida(self):
         if self.estado == ESTADO_RESUELTA or self.estado == ESTADO_RECHAZADA:

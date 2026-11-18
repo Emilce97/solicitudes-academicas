@@ -54,9 +54,9 @@ class Sistema:
             datos["solicitudes"].append({"id": s.id, "legajo": s.estudiante.legajo, "tipo": s.tipo,
                                      "descripcion": s.descripcion, "prioridad": s.prioridad,
                                      "estado": s.estado, "fecha": s.fecha, "responsable": id_responsable})
-        f = open(ARCHIVO, "w", encoding="utf-8")
-        json.dump(datos, f, indent=2, ensure_ascii=False)
-        f.close()
+        archivo = open(ARCHIVO, "w", encoding="utf-8")
+        json.dump(datos, archivo, indent=2, ensure_ascii=False)
+        archivo.close()
 
     # ------------------------------------------------------------------
     # Operaciones
