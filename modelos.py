@@ -1,5 +1,15 @@
 from datetime import datetime, date
 
+# Prioridades de una solicitud (1 = la más urgente).
+PRIORIDAD_ALTA = 1
+PRIORIDAD_MEDIA = 2
+PRIORIDAD_BAJA = 3
+
+# Días que puede estar abierta una solicitud antes de considerarse vencida.
+PLAZO_ALTA = 5
+PLAZO_MEDIA = 10
+PLAZO_BAJA = 20
+
 
 class Estudiante:
     def __init__(self, legajo, nombre, apellido, email, carrera):
@@ -35,9 +45,9 @@ class Solicitud:
     def esta_vencida(self):
         if self.estado == "RESUELTA" or self.estado == "RECHAZADA":
             return False
-        if self.prioridad == 1:
-            return self.dias_transcurridos() > 5
-        elif self.prioridad == 2:
-            return self.dias_transcurridos() > 10
+        if self.prioridad == PRIORIDAD_ALTA:
+            return self.dias_transcurridos() > PLAZO_ALTA
+        elif self.prioridad == PRIORIDAD_MEDIA:
+            return self.dias_transcurridos() > PRIORIDAD_MEDIA
         else:
-            return self.dias_transcurridos() > 20
+            return self.dias_transcurridos() > PLAZO_BAJA

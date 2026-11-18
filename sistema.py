@@ -1,6 +1,6 @@
 import json
 from datetime import datetime, date
-from modelos import Estudiante, Responsable, Solicitud
+from modelos import Estudiante, Responsable, Solicitud, PRIORIDAD_ALTA, PRIORIDAD_MEDIA, PLAZO_BAJA, PLAZO_ALTA, PLAZO_MEDIA, PRIORIDAD_BAJA
 
 ARCHIVO = "datos.json"
 
@@ -69,8 +69,8 @@ class Sistema:
         if est == None:
             est = estudiante
             self.estudiantes.append(est)
-        if prioridad < 1 or prioridad > 3:
-            prioridad = 2
+        if prioridad < PRIORIDAD_ALTA or prioridad > PRIORIDAD_BAJA:
+            prioridad = PRIORIDAD_MEDIA
         nuevo_id = 1
         for s in self.solicitudes:
             if s.id >= nuevo_id:
@@ -132,7 +132,7 @@ class Sistema:
         r = "Sin asignar"
         if s.responsable != None:
             r = s.responsable.nombre + " (" + s.responsable.area + ")"
-        p = "Alta" if s.prioridad == 1 else ("Media" if s.prioridad == 2 else "Baja")
+        p = "Alta" if s.prioridad == PRIORIDAD_ALTA else ("Media" if s.prioridad == PRIORIDAD_MEDIA else "Baja")
         v = " [VENCIDA]" if s.esta_vencida() else ""
         return ("#" + str(s.id) + " | " + s.tipo + " | " + s.estudiante.apellido + ", " + s.estudiante.nombre
                 + " | " + p + " | " + s.estado + " | " + r + v)
@@ -199,9 +199,9 @@ class Sistema:
         media = 0
         baja = 0
         for s in self.solicitudes:
-            if s.prioridad == 1:
+            if s.prioridad == PRIORIDAD_ALTA:
                 alta += 1
-            elif s.prioridad == 2:
+            elif s.prioridad == PRIORIDAD_MEDIA:
                 media += 1
             else:
                 baja += 1
