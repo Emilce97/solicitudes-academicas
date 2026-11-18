@@ -44,7 +44,7 @@ class Sistema:
         datos = {"estudiantes": [], "responsables": [], "solicitudes": []}
         for e in self.estudiantes:
             datos["estudiantes"].append({"legajo": e.legajo, "nombre": e.nombre, "apellido": e.apellido,
-                                     "email": e.email, "carrera": e.carrera})
+                                         "email": e.email, "carrera": e.carrera})
         for r in self.responsables:
             datos["responsables"].append({"id": r.id, "nombre": r.nombre, "area": r.area})
         for s in self.solicitudes:
@@ -52,8 +52,8 @@ class Sistema:
             if s.responsable != None:
                 id_responsable = s.responsable.id
             datos["solicitudes"].append({"id": s.id, "legajo": s.estudiante.legajo, "tipo": s.tipo,
-                                     "descripcion": s.descripcion, "prioridad": s.prioridad,
-                                     "estado": s.estado, "fecha": s.fecha, "responsable": id_responsable})
+                                         "descripcion": s.descripcion, "prioridad": s.prioridad,
+                                         "estado": s.estado, "fecha": s.fecha, "responsable": id_responsable})
         archivo = open(ARCHIVO, "w", encoding="utf-8")
         json.dump(datos, archivo, indent=2, ensure_ascii=False)
         archivo.close()
