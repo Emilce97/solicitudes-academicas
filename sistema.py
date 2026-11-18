@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, date
+from datetime import date
 from modelos import (Estudiante, Responsable, Solicitud,
                      PRIORIDAD_ALTA, PRIORIDAD_MEDIA, PRIORIDAD_BAJA,
                      ESTADO_PENDIENTE, ESTADO_EN_PROCESO, ESTADO_RESUELTA, ESTADO_RECHAZADA,
@@ -226,7 +226,7 @@ class Sistema:
                 else:
                     carga[s.responsable.nombre] = 1
         return carga
-    
+
     def reporte(self):
         print("=" * 60)
         print("REPORTE DE SOLICITUDES - " + date.today().strftime("%d/%m/%Y"))
