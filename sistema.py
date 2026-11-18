@@ -170,49 +170,49 @@ class Sistema:
     # Reporte
     # ------------------------------------------------------------------
     def _contar_por_estado(self):
-        c1 = 0
-        c2 = 0
-        c3 = 0
-        c4 = 0
+        pendientes = 0
+        en_proceso = 0
+        resueltas = 0
+        rechazadas = 0
         for s in self.solicitudes:
             if s.estado == "PENDIENTE":
-                c1 += 1
+                pendientes += 1
             elif s.estado == "EN_PROCESO":
-                c2 += 1
+                en_proceso += 1
             elif s.estado == "RESUELTA":
-                c3 += 1
+                resueltas += 1
             elif s.estado == "RECHAZADA":
-                c4 += 1
-        return c1, c2, c3, c4
+                rechazadas += 1
+        return pendientes, en_proceso, resueltas, rechazadas
 
     def _contar_por_tipo(self):
-        t = {}
+        por_tipo = {}
         for s in self.solicitudes:
-            if s.tipo in t:
-                t[s.tipo] += 1
+            if s.tipo in por_tipo:
+                por_tipo[s.tipo] += 1
             else:
-                t[s.tipo] = 1
-        return t
+                por_tipo[s.tipo] = 1
+        return por_tipo
 
     def _contar_por_prioridad(self):
-        a = 0
-        m = 0
-        b = 0
+        alta = 0
+        media = 0
+        baja = 0
         for s in self.solicitudes:
             if s.prioridad == 1:
-                a += 1
+                alta += 1
             elif s.prioridad == 2:
-                m += 1
+                media += 1
             else:
-                b += 1
-        return a, m, b
+                baja += 1
+        return alta, media, baja
 
     def _solicitudes_vencidas(self):
-        v = []
+        vencidas = []
         for s in self.solicitudes:
             if s.esta_vencida():
-                v.append(s)
-        return v
+                vencidas.append(s)
+        return vencidas
 
     def _carga_abierta_por_responsable(self):
         carga = {}
@@ -233,24 +233,24 @@ class Sistema:
         if total == 0:
             print("No hay solicitudes cargadas")
             return
-        c1, c2, c3, c4 = self._contar_por_estado()
+        pendientes, en_proceso, resueltas, rechazadas = self._contar_por_estado()
         print("\nPor estado:")
-        print("  Pendientes: " + str(c1) + " (" + str(round(c1 * 100 / total, 1)) + "%)")
-        print("  En proceso: " + str(c2) + " (" + str(round(c2 * 100 / total, 1)) + "%)")
-        print("  Resueltas:  " + str(c3) + " (" + str(round(c3 * 100 / total, 1)) + "%)")
-        print("  Rechazadas: " + str(c4) + " (" + str(round(c4 * 100 / total, 1)) + "%)")
-        t = self._contar_por_tipo()
+        print("  Pendientes: " + str(pendientes) + " (" + str(round(pendientes * 100 / total, 1)) + "%)")
+        print("  En proceso: " + str(en_proceso) + " (" + str(round(en_proceso * 100 / total, 1)) + "%)")
+        print("  Resueltas:  " + str(resueltas) + " (" + str(round(resueltas * 100 / total, 1)) + "%)")
+        print("  Rechazadas: " + str(rechazadas) + " (" + str(round(rechazadas * 100 / total, 1)) + "%)")
+        por_tipo = self._contar_por_tipo()
         print("\nPor tipo:")
-        for k in t:
-            print("  " + k + ": " + str(t[k]))
-        a, m, b = self._contar_por_prioridad()
+        for k in por_tipo:
+            print("  " + k + ": " + str(por_tipo[k]))
+        alta, media, baja = self._contar_por_prioridad()
         print("\nPor prioridad:")
-        print("  Alta:  " + str(a))
-        print("  Media: " + str(m))
-        print("  Baja:  " + str(b))
-        v = self._solicitudes_vencidas()
-        print("\nSolicitudes vencidas: " + str(len(v)))
-        for s in v:
+        print("  Alta:  " + str(alta))
+        print("  Media: " + str(media))
+        print("  Baja:  " + str(baja))
+        vencidas = self._solicitudes_vencidas()
+        print("\nSolicitudes vencidas: " + str(len(vencidas)))
+        for s in vencidas:
             print("  #" + str(s.id) + " " + s.tipo + " - " + s.estudiante.apellido + ", " + s.estudiante.nombre)
         carga = self._carga_abierta_por_responsable()
         print("\nCarga abierta por responsable:")
