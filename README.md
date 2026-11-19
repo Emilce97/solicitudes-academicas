@@ -13,7 +13,6 @@
 | Recurso | Enlace |
 | :--- | :--- |
 | Video explicativo | https://www.youtube.com/watch?v=_y3VTFhkgIg |
-| TPI (informe) | [enlace] |
 
 ## Descripción
 
