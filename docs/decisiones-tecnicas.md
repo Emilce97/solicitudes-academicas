@@ -59,6 +59,9 @@ Este documento registra las decisiones más importantes que se tomaron durante e
 **Qué no se cambió y por qué.**
 - **Las variables de bucle de una letra** (`s`, `e`, `x`, `r`): son locales y de alcance corto, y cambiarlas aumentaba el riesgo sin un beneficio claro.
 - **Los textos que ve el usuario** (las etiquetas "Alta", "Media" y "Baja", el ancho del reporte y los textos del menú): cambiarlos habría alterado el comportamiento externo.
+- **El parámetro `id` de los constructores de `Responsable` y `Solicitud`** en `modelos.py`: mismo criterio, es un nombre local de alcance corto (PR #5).
+- **La estructura `if/elif/else` de `esta_vencida()`**: agregar una prioridad nueva todavía obliga a modificar ese método, por lo que el principio abierto/cerrado (OCP) quedó cumplido solo en parte. Se resolvería con un diccionario de plazos y una tabla de transiciones (informe, sección 6.1).
+
 
 ## 8. Lo que quedó fuera del alcance
 
@@ -67,6 +70,8 @@ Este documento registra las decisiones más importantes que se tomaron durante e
 **Por qué.**
 - **El manejo de errores**, a pesar de tener prioridad alta, no se resuelve con un refactoring: corregirlo cambia lo que hace el sistema (por ejemplo, mostrar un mensaje en lugar de detenerse ante una entrada inválida). Debe abordarse como una corrección, con sus propias pruebas. Es la primera mejora futura propuesta.
 - **El acoplamiento y la separación de `Sistema` en componentes** (modelo, lógica, persistencia e interfaz) requieren reestructurar gran parte del código, con un esfuerzo que excede este trabajo. Los refactorings aplicados avanzan en esa dirección.
+
+Las mejoras pendientes y su orden están en la sección 10.3 del informe.
 
 ## 9. Flujo de trabajo en Git
 
@@ -84,3 +89,15 @@ Este documento registra las decisiones más importantes que se tomaron durante e
 **Decisión.** Un Pull Request se aprueba si cumple todos los criterios de comportamiento y alcance del checklist. Las observaciones menores de prolijidad o diseño se registran y se corrigen en un cambio posterior.
 
 **Por qué.** Mantiene cada Pull Request acotado a un solo cambio y facilita su revisión, sin dejar de registrar lo que hay que mejorar. Por ejemplo, el import sin uso y la línea con espacios observados en el PR #4 se corrigieron en el PR #5.
+
+## 11. Verificación doble: pruebas y comparación de salidas
+
+**Decisión.** Además de las 24 pruebas automáticas, en cada refactoring se ejecutó el sistema con las mismas entradas antes y después, y se comparó lo que imprime con `diff`.
+
+**Por qué.** Las pruebas verifican las reglas, pero la comparación de salidas detecta cambios en el formato exacto de lo que se muestra y cubre casos que las pruebas no tienen, como los plazos de 10 y 20 días. Se hizo el mismo día, porque el reporte y el vencimiento dependen de la fecha. Los resultados están en [`evidencias.md`](evidencias.md).
+
+## 12. Versionado: tags
+
+**Decisión.** Marcar con tags los estados generales (`estado-inicial` y `estado-refactorizado`) y el hito de cada etapa (`etapa-diagnostico`, `etapa-pruebas`, `etapa-refactoring` y `etapa-docs`).
+
+**Por qué.** Permite ver y comparar la versión base y la versión final del código, y ubicar en el historial dónde terminó cada etapa. La lista de tags y lo que marca cada uno está en [`evidencias.md`](evidencias.md).
