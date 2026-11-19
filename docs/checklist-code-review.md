@@ -32,22 +32,32 @@ Cada Pull Request fue revisado por la integrante que no lo había escrito, sigui
 ## E. Diseño y evidencia
 
 - [ ] El cambio mejora una responsabilidad, el acoplamiento o la cohesión, y se puede decir en una frase cuál.
-- [ ] Se guardaron las capturas del código antes y después, el link al commit y el resultado de las pruebas.
+- [ ] Se guardaron las capturas del código antes y después (en el informe, secciones 7 y 8.2), el link al commit y el resultado de las pruebas.
 
 ## F. Resultado de la revisión
 
 | Resultado | Cuándo corresponde |
 | --- | --- |
 | **Aprobada** | Se cumplen todos los criterios. |
-| **Aprobada con observaciones** | Se cumplen todos los criterios de B y C, y hay observaciones menores en A, D o E que no afectan el comportamiento. Las observaciones se registran y se corrigen en un cambio posterior. |
+| **Aprobada con observaciones** | Se cumplen todos los criterios de B y C, y hay observaciones menores en A, D o E que no afectan el comportamiento. Las observaciones se registran y se corrigen en un cambio posterior, aunque también se admite corregirlas dentro del mismo PR antes del merge. |
 | **Requiere correcciones** | Falla algún criterio de B o C. El Pull Request no se integra hasta corregirlo. |
 
 ## Resultado de cada revisión
 
-| Pull Request | Autora | Revisora | Resultado |
+| Pull Request | Autora | Revisora | Qué se verificó | Resultado |
+| --- | --- | --- | --- | --- |
+| [#1 Pruebas de caracterización](https://github.com/Emilce97/solicitudes-academicas/pull/1) | Emilce | Natalia | 24 pruebas OK; no modifica `sistema.py`, `modelos.py` ni `main.py` (línea base confiable); usan `tests/datos_prueba.json` sin tocar `datos.json`; fijan la fecha, así que no dependen del día; cubren registrar, asignar, cambiar estado, búsquedas, reporte y vencimiento, incluida la prioridad fuera de rango; cambio en `.gitignore` correcto | Aprobada |
+| [#2 Move Method](https://github.com/Emilce97/solicitudes-academicas/pull/2) | Emilce | Natalia | 24 pruebas OK; `tests/` sin cambios; salida de las búsquedas idéntica en `main` y en la rama | Aprobada |
+| [#3 Introduce Parameter Object](https://github.com/Emilce97/solicitudes-academicas/pull/3) | Emilce | Natalia | 24 OK; validación del tipo antes del alta; salida idéntica (estudiante nuevo, existente y búsqueda) | Aprobada con observaciones |
+| [#4 Extract Method](https://github.com/Emilce97/solicitudes-academicas/pull/4) | Natalia | Emilce | 24 OK; salida idéntica de búsquedas y reporte | Aprobada con observaciones |
+| [#5 Rename y constantes](https://github.com/Emilce97/solicitudes-academicas/pull/5) | Natalia | Emilce | 24 OK; `git diff --check` limpio; recorrido completo del menú idéntico (234 líneas); plazos probados en 92 fechas (1/10 al 31/12) | Aprobada con observaciones (corregidas antes de integrar) |
+
+## Observaciones y acciones correctivas
+
+| Observación | PR | Acción | Dónde quedó |
 | --- | --- | --- | --- |
-| #1 Pruebas de caracterización | Emilce | Natalia | Aprobada |
-| #2 Move Method | Emilce | Natalia | Aprobada |
-| #3 Introduce Parameter Object | Emilce | Natalia | Aprobada con observaciones (búsqueda repetida del estudiante: queda como mejora futura) |
-| #4 Extract Method | Natalia | Emilce | Aprobada con observaciones (import sin uso y línea con espacios: corregidos en el #5) |
-| #5 Rename y Replace Magic Number with Constant | Natalia | Emilce | Aprobada (las observaciones menores sobre nombres y el salto de línea final se corrigieron antes de integrarlo) |
+| `crear_solicitud()` vuelve a buscar al estudiante aunque el menú ya lo hizo | #3 | No bloqueante; mejora futura: `buscar_estudiante(legajo)` | Decisiones técnicas, punto 5 |
+| `datetime` quedó importado sin uso | #4 | Corregido | PR #5 |
+| Línea en blanco con espacios antes de `def reporte` | #4 | Corregido | PR #5 |
+| Nombres cortos que no son de bucle (`res`, `est`, `nuevo`) | #5 | Renombrados a `resultados`, `estudiante`/`estudiante_encontrado`, `nuevo_estado` | Commit `e33a1f5` |
+| Falta el salto de línea final en `modelos.py` | #5 | Agregado | Mismo commit |
