@@ -12,7 +12,7 @@
 
 | Recurso | Enlace |
 | :--- | :--- |
-| Video explicativo | [https://www.youtube.com/watch?v=_y3VTFhkgIg] |
+| Video explicativo | https://www.youtube.com/watch?v=_y3VTFhkgIg |
 | TPI (informe) | [enlace] |
 
 ## Descripción
@@ -80,7 +80,7 @@ así que no modifican `datos.json` y su resultado no depende del día en que se 
 - **Trabajo en ramas:** cada cambio se hizo en una rama propia (`emilce/...`, `natalia/...`)
   y se integró a `main` mediante un pull request revisado por la otra integrante.
 - **Tags de etapa:** `etapa-diagnostico`, `etapa-pruebas`, `etapa-refactoring` y `etapa-docs`
-  marcan el commit donde terminó cada etapa (detalle en [`docs/evidencias.md`](docs/evidencias.md)).
+  marcan el commit donde terminó cada etapa (detalle en `docs/evidencias.md`(docs/evidencias.md)).
 
 ## Refactorings aplicados
 
