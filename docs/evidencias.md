@@ -19,7 +19,7 @@ Otros recursos:
 
 - **Pull Requests #1 a #6** de este repositorio: revisión de cada cambio, con los comentarios y las verificaciones realizadas.
 - **Informe del TPI:** capturas del funcionamiento (sección 2.4), de la ejecución de las pruebas antes y después de cada refactoring (sección 8.2) y de las revisiones de código (sección 9.2).
-- **ZIP de la entrega:** contiene el informe en PDF (`informe/`), el código de la versión inicial (`codigo/estado-inicial/`) y el código final con pruebas, README y `/docs` (`codigo/estado-refactorizado/`).
+- **ZIP de la entrega:** contiene Anexos con información complementaria al informe y repositorio.
 - **Pruebas automáticas:** `tests/test_caracterizacion.py` (24 casos). Se ejecutan con `python -m unittest discover -s tests -v`.
 
 ## Resultado de las pruebas (informe, sección 8.2)
