@@ -12,7 +12,7 @@
 
 | Recurso | Enlace |
 | :--- | :--- |
-| Video explicativo | [enlace] |
+| Video explicativo | [https://www.youtube.com/watch?v=_y3VTFhkgIg] |
 | TPI (informe) | [enlace] |
 
 ## Descripción
@@ -79,6 +79,8 @@ así que no modifican `datos.json` y su resultado no depende del día en que se 
 - **Tag `estado-refactorizado`:** estado final tras los refactorings.
 - **Trabajo en ramas:** cada cambio se hizo en una rama propia (`emilce/...`, `natalia/...`)
   y se integró a `main` mediante un pull request revisado por la otra integrante.
+- **Tags de etapa:** `etapa-diagnostico`, `etapa-pruebas`, `etapa-refactoring` y `etapa-docs`
+  marcan el commit donde terminó cada etapa (detalle en [`docs/evidencias.md`](docs/evidencias.md)).
 
 ## Refactorings aplicados
 
@@ -87,7 +89,7 @@ así que no modifican `datos.json` y su resultado no depende del día en que se 
 | Move Method | `emilce/move-method` | [#2](https://github.com/Emilce97/solicitudes-academicas/pull/2) | Emilce |
 | Introduce Parameter Object | `emilce/parameter-object` | [#3](https://github.com/Emilce97/solicitudes-academicas/pull/3) | Emilce |
 | Extract Method | `natalia/extract-method` | [#4](https://github.com/Emilce97/solicitudes-academicas/pull/4) | Natalia |
-| Rename y Replace Magic Number with Constant | `natalia/rename` | [enlace] | Natalia |
+| Rename y Replace Magic Number with Constant | `natalia/rename` | [#5](https://github.com/Emilce97/solicitudes-academicas/pull/5) | Natalia |
 
 ## Tecnologías
 
